@@ -5,6 +5,7 @@ from frame import Frame
 class BowlingGame:
 
     def __init__(self):
+        self._second_bonus_throw = None
         self._bonus_throw = None
         self._frames = []
     
@@ -27,11 +28,14 @@ class BowlingGame:
                 else:
                     frame.set_bonus(self._frames[i + 1].get_first_throw())
             if frame.is_strike():
-                if self._frames[i + 1].is_strike():
-                    frame.set_bonus(self._frames[i + 1].get_first_throw() + self._frames[i + 1].get_second_throw() +
-                                    self._frames[i + 2].get_first_throw())
+                if i == len(self._frames) - 1:
+                    frame.set_bonus(self._bonus_throw + self._second_bonus_throw)
                 else:
-                    frame.set_bonus(self._frames[i + 1].get_first_throw() + self._frames[i + 1].get_second_throw())
+                    if self._frames[i + 1].is_strike():
+                        frame.set_bonus(self._frames[i + 1].get_first_throw() + self._frames[i + 1].get_second_throw() +
+                                        self._frames[i + 2].get_first_throw())
+                    else:
+                        frame.set_bonus(self._frames[i + 1].get_first_throw() + self._frames[i + 1].get_second_throw())
             total_score += frame.score()
         return total_score
 
@@ -39,4 +43,4 @@ class BowlingGame:
         self._bonus_throw = bonus_throw
 
     def set_second_bonus_throw(self, bonus_throw: int) -> None:
-        pass
+        self._second_bonus_throw = bonus_throw
